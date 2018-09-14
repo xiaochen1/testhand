@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>dom宽高位置相关属性</title>
+		<style>
+			* {padding: 0; margin: 0}
+			.container {width: 800px;margin: 0 auto;}
+			.container .content {}
+			.container .content .scrollbox {
+				width: 300px;
+				height: 200px;
+				padding: 10px;
+				border: 2px solid red;
+				overflow: auto;
+			}
+			.scrollbox h2 {
+				display: block;
+				height: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="content">
+				<div class="scrollbox" id='scrollbox' onscroll="handleScroll(event)">
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					<h2>你好啊</h2>
+					
+					
+				</div>
+			</div>
+		</div>
+		
+		
+		<script src="js/jquery-3.3.1.js"></script>
+		<script>
+//			var scrollbox = document.getElementById('scrollbox');
+			console.log("宽：300；  高： 200；  padding: 10;  border: 2");
+			function handleScroll(e) {
+//				console.log(e);
+				var target = e.target || e.srcElement ;
+//				console.log("clientWidth---->"+target.clientWidth, "clientHeight---->"+target.clientHeight);
+//				console.log("clientTop---->"+target.clientTop, "clientLeft---->"+target.clientLeft);
+//				console.log("offsetWidth---->"+target.offsetWidth, "offsetHeight---->"+target.offsetHeight);
+//				console.log("scrollWidth---->"+target.scrollWidth, "scrollHeight---->"+target.scrollHeight);
+//				console.log(target);
+//				console.log("scrollTop---->"+target.scrollTop,"    ;scrollLeft---->"+ target.scrollLeft);
+				console.log(target.scrollTop,target.scrollLeft);
+
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<script>
+
+			function  getNDayString(num){
+				var date1 = new Date();
+				var date2 = new Date(date1);
+				date2.setDate(date1.getDate() + Math.ceil(num));
+				//var time2 = date2.getFullYear()+"-"+(date2.getMonth()+1)+"-"+date2.getDate();
+				var year = date2.getFullYear();
+				var month = date2.getMonth() + 1 > 10 ? (date2.getMonth() + 1) : '0'+ (date2.getMonth() + 1);
+				var day = date2.getDate() > 10 ? (date2.getDate()) : '0'+ (date2.getDate());
+				
+				var hour = date2.getHours();
+				var minute = date2.getMinutes() > 10 ? date2.getMinutes() : '0' + date2.getMinutes();
+				var second = date2.getSeconds() > 10 ? date2.getSeconds() : '0' + date2.getSeconds();
+				return year + "-"+month+"-"+day+" "+ hour+":"+minute+":"+second;
+			}
+			
+			console.log(getNDayString(0));
+			console.log(getNDayString(10));
+			console.log(getNDayString(-6));
+
+			
+		</script>
+		
+	</body>
+</html>

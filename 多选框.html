@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>多选框</title>
+		<style type="text/css">
+			select {
+				width: 100px;
+			}
+		</style>
+		
+		<script src="js/jquery-3.3.1.js"></script>
+	</head>
+	<body>
+		
+		<div>
+			<select id="multiSelect" name="multiSelect" multiple="">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+			<button id="see">点击查看多选框结果</button>
+		</div>
+		
+		
+		<script>
+			$('#see').click(function(){
+				console.log($('#multiSelect').val());				
+			});
+		</script>
+	</body>
+</html>

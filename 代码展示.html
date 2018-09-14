@@ -1,0 +1,75 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!--<link rel="stylesheet" href="css/element_index.css">-->
+		<title>代码展示</title>
+		<style>
+			.container {
+				width: 700px;
+				height: 500px;
+				margin: 0 auto;
+				padding: 40px;
+				border: 1px solid #ccc;
+			}
+			
+			
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="container">
+				<code>{{JSON.stringify(jstemplate,null, 4)}}</code> <br /><br /><br /><br />
+				<code>{{needTemplate}}</code>
+				
+				<el-input v-model="beautifyTemplate" type="textarea" :autosize="{maxRows: 10}"></el-input>
+				
+				<el-button size="small" @click="see">点击查看</el-button>
+			</div>
+
+		</div>
+	</body>
+
+	<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+	<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+
+	<script src="js/vue.js"></script>
+	<script src="js/index.js"></script>
+
+	<script>
+		new Vue({
+			el: '#app',
+			data: function() {
+				return {
+								
+					jstemplate: [ { "title": "锅炉信息", "data": [ [ "燃料类型", "天然气" ], [ "锅炉重量", "2吨" ], [ "出厂日期", "2018-03-03" ], [ "燃料类型", "天然气" ], [ "锅炉重量", "2吨" ], [ "出厂日期", "2018-03-03" ], [ "燃料类型", "天然气" ], [ "锅炉重量", "2吨" ], [ "出厂日期", "2018-03-03" ] ] }, { "title": "能效指标信息", "data": [ [ "热效率", 0.8 ], [ "燃料热值", 7000 ], [ "吨汽燃料指标", 0.21 ], [ "热效率", 0.8 ], [ "燃料热值", 7000 ], [ "吨汽燃料指标", 0.21 ], [ "热效率", 0.8 ], [ "燃料热值", 7000 ], [ "吨汽燃料指标", 0.21 ] ] } ] ,
+					needTemplate: "",
+					beautifyTemplate: [],
+					
+				}
+			},
+			created: function() {
+
+				this.beautifyTemplate = JSON.stringify(this.jstemplate, null ,4);
+
+			},
+			methods: {
+				see(){
+					this.needTemplate = JSON.parse(this.beautifyTemplate);
+					this.jstemplate = JSON.parse(JSON.stringify(this.needTemplate));
+
+
+
+				},
+			},
+			
+			computed: {
+				
+			},
+		})
+	</script>
+
+</html>

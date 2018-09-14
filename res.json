@@ -1,0 +1,32 @@
+{
+	"data": "{\n \"message\": \"Server Error\"\n}{\n \"message\": \"Server Error\"\n}",
+	"status": 500,
+	"statusText": "Internal Server Error",
+	"headers": {
+		"date": "Thu, 05 Jul 2018 07:40:09 GMT",
+		"server": "Apache/2.4.33 (Win32) PHP/7.2.4",
+		"x-powered-by": "PHP/7.2.4",
+		"access-control-allow-methods": "*",
+		"content-type": "application/json",
+		"access-control-allow-origin": "*",
+		"cache-control": "no-cache, private",
+		"access-control-allow-credentials": "true",
+		"connection": "close",
+		"access-control-allow-headers": "*",
+		"content-length": "66"
+	},
+	"config": {
+		"transformRequest": {},
+		"transformResponse": {},
+		"timeout": 0,
+		"xsrfCookieName": "XSRF-TOKEN",
+		"xsrfHeaderName": "X-XSRF-TOKEN",
+		"maxContentLength": -1,
+		"headers": {
+			"Accept": "application/json, text/plain, */*"
+		},
+		"method": "get",
+		"url": "get_version"
+	},
+	"request": {}
+}

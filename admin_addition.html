@@ -1,0 +1,506 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!--<link rel="stylesheet" href="css/element_index.css">-->
+		<title>测试admin中的附加信息功能</title>
+		<style>
+			.container {
+				width: 700px;
+				height: 500px;
+				margin: 0 auto;
+				padding: 40px;
+				border: 1px solid #ccc;
+			}
+			
+			.el-collapse-item__content .addition-main .addition-box .box-item .message {
+				width: 20%;
+				float: left;
+				line-height: 25px;
+				margin-bottom: 20px;
+			}
+			
+			.el-collapse-item__content .addition-main .addition-box .box-item .message .desc {
+				font-family: MicrosoftYaHei;
+				font-size: 12px;
+				font-weight: normal;
+				font-stretch: normal;
+				letter-spacing: 0px;
+				color: #999999;
+			}
+			
+			.el-collapse-item__content .addition-main .addition-box .box-item .message .value {
+				font-family: MicrosoftYaHei;
+				font-size: 14px;
+				font-weight: normal;
+				letter-spacing: 0px;
+				color: #333333;
+			}
+			
+			.addition-container .main .box {
+				margin-bottom: 20px;
+			}
+			
+			.addition-container .main .box .box-title {
+				height: 48px;
+				line-height: 48px;
+				color: #303133;
+				cursor: pointer;
+				border-bottom: 1px solid #ebeef5;
+				border-top: 1px solid #ebeef5;
+				margin-bottom: 10px;
+				font-size: 13px;
+				font-weight: 500;
+				-webkit-transition: border-bottom-color .3s;
+				transition: border-bottom-color .3s;
+				outline: 0;
+			}
+			
+			.addition-container .main .box .box-body {
+				width: 100%;
+				padding: 10px 20px;
+				box-sizing: border-box;
+			}
+			
+			.addition-container .main .box .box-body:after {
+				content: " ";
+				display: block;
+				clear: both;
+				visibility: hidden;
+			}
+			
+			.addition-container .main .box .box-body .item {
+				width: 18%;
+				height: 70px;
+				margin-right: 10px;
+				box-sizing: border-box;
+				float: left;
+			}
+			
+			.addition-container .main .box .box-body .item .desc {
+				font-family: MicrosoftYaHei;
+				font-size: 12px;
+				font-weight: normal;
+				font-stretch: normal;
+				letter-spacing: 0px;
+				margin-bottom: 8px;
+				color: #999999;
+			}
+			
+			.addition-container .main .box .box-body .item .value {
+				font-family: MicrosoftYaHei;
+				font-size: 14px;
+				font-weight: normal;
+				letter-spacing: 0px;
+				color: #333333;
+			}
+			
+			.el-dialog {
+				width: 70%;
+				height: 70%;
+				display: flex;
+				flex-direction: column;
+			}
+			
+			.el-dialog .el-dialog__body {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+			}
+			
+			.el-dialog .el-dialog__body .addition-container {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+			}
+			
+			.el-dialog .el-dialog__body .addition-container .main {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				overflow: auto;
+			}
+			
+			.el-dialog .el-dialog__body .addition-container .main .box {
+				/*flex: 1;
+				display: flex;
+				flex-direction: column;*/
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			{{temp.name}}
+			<el-input v-model="test1"></el-input>
+			<el-input v-model="test2"></el-input>
+			{{editAdditionData}} </br>
+			</br>
+			</br>
+			</br>
+			</br>
+			{{editAdditionData[0].title}} <br />
+
+			<el-input v-model="testjson" type="textarea" autosize></el-input>
+			<el-button size="small" type="primary " @click="verify">校验JSON</el-button> <br />
+
+			<br />
+			<el-button size="small" type="primary " @click="showEditAddition">编辑</el-button>
+
+			<!--附加信息的展示-->
+			<div class="container">
+
+				<el-button @click="showAllCollapse">查看所有</el-button>
+				<el-collapse :value="showCollapseValue" @change="handleChange" ref="testref">
+
+					<el-collapse-item v-for="(addition, index) in additionData" :name="index" :key="addition.title">
+						<template slot="title">
+							{{addition.title}} {{index}}<i class="header-icon "></i>
+						</template>
+						<div class="addition-main">
+							<div class="addition-box">
+								<div class="box-item">
+
+									<div v-for="dataitem in addition.data" class="message">
+										<div class="desc">{{dataitem[0]}}</div>
+										<div class="value">{{dataitem[1]}}</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</el-collapse-item>
+					{{showCollapseValue}}
+
+				</el-collapse>
+
+			</div>
+
+			<!--编辑附加信息-->
+			<el-dialog title="附加信息" :visible.sync="editAdditionVisible">
+				<div class="addition-container">
+					<div class="main">
+
+						<div class="box" v-for="(addition, index) in editAdditionData">
+							<div class="box-title"> {{addition.title}}</div>
+							<div class="box-body">
+								<div class="item" v-for="(item, index) in addition.data">
+									<div class="desc">
+										{{item[0]}}
+									</div>
+									<div class="value">
+										<el-input v-model="item[1]"></el-input>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="resetEditAddition">重置</el-button>
+					<el-button @click="cancelChangeEditAddition">取 消</el-button>
+					<el-button type="primary" @click="confirmSaveEditAddition">确 定</el-button>
+				</div>
+			</el-dialog>
+
+			<el-input type="textarea" v-model="myscript" :autosize="{maxRows: 15}"></el-input>
+
+		</div>
+	</body>
+
+	<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+	<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+
+	<script src="js/vue.js"></script>
+	<script src="js/index.js"></script>
+
+	<script>
+		new Vue({
+			el: '#app',
+			data: function() {
+				return {
+					editAdditionVisible: false,
+					showCollapseValue: [],
+					testjson: '',
+					additionData: [{
+						"title": "锅炉信息",
+						"data": [
+							["燃料类型", "天然气"],
+							["锅炉重量", "2吨"],
+							["出厂日期", "2018-03-03"],
+							["燃料类型", "天然气"],
+							["锅炉重量", "2吨"],
+							["出厂日期", "2018-03-03"],
+							["燃料类型", "天然气"],
+							["锅炉重量", "2吨"],
+							["出厂日期", "2018-03-03"],
+						],
+					}, {
+						"title": "能效指标信息",
+						"data": [
+							["热效率", 0.8],
+							["燃料热值", 7000],
+							["吨汽燃料指标", 0.21],
+							["热效率", 0.8],
+							["燃料热值", 7000],
+							["吨汽燃料指标", 0.21],
+							["热效率", 0.8],
+							["燃料热值", 7000],
+							["吨汽燃料指标", 0.21],
+						],
+					}],
+					editAdditionData: [],
+					addAdditionData: [],
+
+					myscript: [
+						["S01", "Instant Flow", "瞬时流量", "$AprusID-1", "L1_3_0", "STA"],
+						["S02", "Temperature", "温度", "$AprusID-1", "L1_3_2", "STA"],
+						["S03", "Pressure", "压力", "$AprusID-1", "L1_3_4", "STA"],
+						["S04", "Cumulative Flow", "累计流量", "$AprusID-1", "L1_3_6", "STA"],
+						["S05", "Air Supply Pressure", "供气压力", "$AprusID-2", "L1_3_0", "STA"],
+						["S06", "Exhaust Temperature", "排气温度", "$AprusID-2", "L1_3_1", "STA"],
+						["S07", "Total Running Hours", "运行总时间 ", "$AprusID-2", "L1_3_2", "STA"],
+						["S08", "Total Loading Hours", "负载总时间", "$AprusID-2", "L1_3_3", "STA"],
+						["S09", "Main Current A", "主机电流A ", "$AprusID-2", "L1_3_4", "STA"],
+						["S10", "Main Current B", "主机电流B ", "$AprusID-2", "L1_3_5", "STA"],
+						["S11", "Main Current C", "主机电流C ", "$AprusID-2", "L1_3_6", "STA"],
+						["S12", "Loading Status", "加载状态 ", "$AprusID-2", "L1_3_7_0", "STA"],
+						["Z", "Running Status", "设备启停状态", "$AprusID-2", "L1_3_7_1", "STA"],
+						["S14", "Oil Filter Use", "油滤器使用时间 ", "$AprusID-2", "L1_3_10", "STA"],
+						["S15", "Oil Separator Use", "油分器使用时间 ", "$AprusID-2", "L1_3_11", "STA"],
+						["S16", "Air Filter Use", "空滤器使用时间 ", "$AprusID-2", "L1_3_12", "STA"],
+						["S17", "Lubricant Oil Use", "润滑油使用时间 ", "$AprusID-2", "L1_3_13", "STA"],
+						["S18", "Grease Use", "润滑脂使用时间 ", "$AprusID-2", "L1_3_14", "STA"],
+						["S19", "System Pressure", "系统压力", "$AprusID-2", "L1_3_15", "STA"],
+						["S20", "Front Bearing Temperature", "前轴承温度", "$AprusID-2", "L1_3_16", "STA"],
+						["S21", "Fan Current A", "风机电流A ", "$AprusID-2", "L1_3_17", "STA"],
+						["S22", "Fan Current B", "风机电流B ", "$AprusID-2", "L1_3_18", "STA"],
+						["S23", "Fan Current C", "风机电流C ", "$AprusID-2", "L1_3_19", "STA"],
+						["S24", "Power Supply Voltage", "电源电压 ", "$AprusID-2", "L1_3_24", "STA"],
+						["S26", "Main Output Frequency", "主机输出频率", "$AprusID-2", "L1_3_34", "STA"],
+						["S27", "This Time Running Sec", "本次运行秒", "$AprusID-2", "L1_3_42", "STA"],
+						["S28", "This Tine Running Min", "本次运行分", "$AprusID-2", "L1_3_43", "STA"],
+						["S29", "This Time Running Hour", "本次运行时", "$AprusID-2", "L1_3_44", "STA"],
+						["S30", "This Time Load Sec", "本次负载秒", "$AprusID-2", "L1_3_45", "STA"],
+						["S31", "This Time Load Min", "本次负载分", "$AprusID-2", "L1_3_46", "STA"],
+						["S32", "This Time Load Hour", "本次负载时", "$AprusID-2", "L1_3_47", "STA"],
+						["S36", "System 2 Convertor Temperature", "主机2变频器温度", "$AprusID-2", "L1_3_104", "STA"],
+						["S37", "System 1 Convertor Temperature", "主机1变频器温度", "$AprusID-2", "L1_3_105", "STA"],
+						["T01", "Fan Starting Temperature", "风机启温度", "$AprusID-2", "L1_3_1000", "SET"],
+						["T02", "Fan Stopping Temp", "风机停温度", "$AprusID-2", "L1_3_1001", "SET"],
+						["T03", "Air Supply Loading Pressure", "供气加载压力", "$AprusID-2", "L1_3_1002", "SET"],
+						["T04", "Air Supply Unload Pressure", "供气卸载压力", "$AprusID-2", "L1_3_1003", "SET"],
+						["T05", "Oil Filter Max Use", "油滤器最大使用", "$AprusID-2", "L1_3_1018", "SET"],
+						["T06", "Oil Separator Max Use", "油分器最大使用", "$AprusID-2", "L1_3_1019", "SET"],
+						["T07", "Air Filter Max Use", "空滤器最大使用", "$AprusID-2", "L1_3_1020", "SET"],
+						["T08", "Lubricant Oil Max Use", "润滑油最大使用", "$AprusID-2", "L1_3_1021", "SET"],
+						["T09", "Grease Max Use", "润滑脂最大使用", "$AprusID-2", "L1_3_1022", "SET"],
+						["T10", "Loading Mode", "加载方式 ", "$AprusID-2", "L1_3_1030", "SET"],
+						["T11", "Running Mode", "运行方式 ", "$AprusID-2", "L1_3_1036", "SET"],
+						["T12", "Loading Pressure", "加载压力", "$AprusID-2", "L1_3_1059", "SET"],
+						["T13", "Unloading Pressure", "卸载压力", "$AprusID-2", "L1_3_1060", "SET"],
+						["T14", "System Rated Current", "主机额定电流", "$AprusID-2", "L1_3_3000", "SET"],
+						["T15", "Fan Rated Current", "风机额定电流", "$AprusID-2", "L1_3_3001", "SET"],
+						["T16", "Air Supply Stopping Pressure", "供气停机压力", "$AprusID-2", "L1_3_3006", "SET"],
+						["T17", "System Stopping Pressure", "系统停机压力", "$AprusID-2", "L1_3_3007", "SET"],
+						["T18", "Ex-Work Year", "出厂日期年", "$AprusID-2", "L1_3_3014", "SET"],
+						["T19", "Ex-Work Month", "出厂日期月", "$AprusID-2", "L1_3_3015", "SET"],
+						["T20", "High Voltage Quota", "温度过高(设定)", "$AprusID-2", "L1_3_3041", "SET"],
+						["T21", "Low Voltage Quota", "温度过低(设定)", "$AprusID-2", "L1_3_3042", "SET"],
+						["T22", "Main System Converting Pressure", "主机变频压力", "$AprusID - 2", "L1_3_3061", "SET"],
+						["T23", "Fan System Converting Pressure", "风机变频压力 ", "$AprusID - 2 ", "L1_3_3066 ", "SET "],
+						["T24 ", "Max Converting Temperature ", "最高变频温度 ", "$AprusID - 2 ", "L1_3_3067 ", "SET "],
+						["S38 ", "Phase A Cumulative Active Power ", "A相累计有功功率 ", "$AprusID - 3 ", "L1_3_100 ", "STA "],
+						["S39 ", "Phase B Cumulative Active Power ", "B相累计有功功率 ", "$AprusID - 3 ", "L1_3_102 ", "STA "],
+						["S40 ", "Phase C Cumulative Active Power ", "C相累计有功功率 ", "$AprusID - 3 ", "L1_3_104 ", "STA "],
+						["S41", "Total Cumulative Active Power", "总累计有功功率", "$AprusID-3", "L1_3_106", "STA"],
+						["S42", "Phase A Voltage", "A相电压", "$AprusID-3", "L1_3_164", "STA"],
+						["S43", "Phase B Voltage", "B相电压", "$AprusID-3", "L1_3_166", "STA"],
+						["S44", "Phase C Voltage", "C相电压", "$AprusID-3", "L1_3_168", "STA"],
+						["S45", "Phase A Current", "A相电流", "$AprusID-3", "L1_3_180", "STA"],
+						["S46", "Phase B Current", "B相电流", "$AprusID-3", "L1_3_182", "STA"],
+						["S47", "Phase C Current", "C相电流", "$AprusID-3", "L1_3_184", "STA"],
+						["TS01", "Cumulative Flow", "累计流量", "& Statos", "CumulativeFlow"],
+						["TS02", "Cumulative Flow", "累计流量", "& Statos", "TotalCumulativeActivePower"],
+						["TS03", "Flow Meter Initial Figure", "流量计初始读数", "& Collectos", "FlowMeterInitialFigure"],
+						["TS04", "Flow Meter Reset Numbers", "流量计复位次数", "& Collectos", "FlowMeterResetNumbers"],
+						["TS05", "Flow Meter Reset Digits", "流量计复位位数", "& Collectos", "FlowMeterResetDigits"],
+						["TS06", "Energy Meter Initial Figure", "电能表初始读数", "& Collectos", "EnergyMeterInitialFigure"],
+						["TS07", "Mutual Inductance", "电能表互感倍数", "& Collectos", "MutualInductance"],
+						["TS08", "Gas Electricity Ratio Hourly", "每小时气电比", "& Statos", "GasElectricityRatioHourly"],
+						["TS09", "Gas Electricity Ratio Daily", "每日气电比", "& Statos", "GasElectricityRatioDaily"],
+						["TS10", "Gas Electricity Ratio Monthly", "每月气电比", "& Statos", "GasElectricityRatioMonthly"]
+					],
+
+					test1: '["apple","pear"]',
+					test2: "",
+					
+					temp: "",
+					
+					
+					
+					
+				}
+			},
+			created: function() {
+				this.editAdditionData = JSON.parse(JSON.stringify(this.additionData));
+				//				console.log(JSON.stringify(this.editAdditionData, null, 4));
+
+				this.test2 = JSON.stringify(JSON.parse(this.test1));
+				this.myscript = JSON.stringify(this.myscript);
+				this.temp = {"name": null};
+				console.log(this.temp);
+				this.temp = JSON.stringify(this.temp);
+				console.log(this.temp);
+				this.temp = JSON.parse(JSON.stringify(this.temp));
+				console.log(this.temp);
+			},
+			methods: {
+				onSubmit() {
+					console.log('submit!');
+				},
+				checkUsername() {
+					console.log(this.username.match(/\s{3,}/));
+				},
+
+				handleChange(val) {
+					console.log(val);
+					console.log(this.$refs.testref);
+				},
+				showAllCollapse() {
+					console.log("展示所有的collapse");
+					this.$refs.testref.$data.activeNames.splice(0);
+					for(var k in this.editAdditionData) {
+						console.log(k);
+						this.$refs.testref.$data.activeNames.push(parseInt(k));
+					}
+					console.log(this.$refs.testref);
+
+				},
+				showEditAddition() {
+					this.editAdditionVisible = true;
+				},
+				resetEditAddition() {
+					var that = this;
+					that.$confirm('是否放弃当前编辑，并恢复到初始状态?', '提示', {
+						confirmButtonText: '确定放弃',
+						cancelButtonText: '继续编辑',
+						type: 'warning'
+					}).then(function() {
+						that.editAdditionData = JSON.parse(JSON.stringify(that.additionData));
+					}).catch(function() {
+						that.$message({
+							type: 'info',
+							message: '请继续编辑'
+						});
+					});
+
+				},
+				cancelChangeEditAddition() {
+					var that = this;
+					that.$confirm('是否放弃当前编辑', '提示', {
+						confirmButtonText: '确定放弃',
+						cancelButtonText: '继续编辑',
+						type: 'warning'
+					}).then(function() {
+						that.editAdditionData = JSON.parse(JSON.stringify(that.additionData));
+						that.editAdditionVisible = false;
+					}).catch(function() {
+						that.$message({
+							type: 'info',
+							message: '请继续编辑'
+						});
+					});
+
+				},
+				confirmSaveEditAddition() {
+					//					this.editAdditionVisible = false;
+					console.log(this.editAdditionData);
+				},
+				verifyJSON(str) {
+					// 校验输入的附加信息内容是否符合json格式
+					var isString = typeof str === 'string' || str instanceof String;
+					var that = this;
+					if(!isString) {
+						throw new TypeError('只接受字符串');
+						return false;
+					}
+					try {
+						console.log(str);
+						var strobj = JSON.parse(str);
+						console.log(strobj);
+						console.log(strobj instanceof Array);
+
+						if(!(strobj instanceof Array)) {
+							that.$message('请用 [ ]将附加信息包裹 ');
+							return false;
+						}
+
+						if(strobj.length < 1) {
+							that.$message('附加信息不能为空,且必须用[]包裹 ');
+							return false;
+						}
+
+						var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) {
+							return typeof obj;
+						} : function(obj) {
+							return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+						};
+						return !!strobj && (typeof strobj === 'undefined' ? 'undefined' : _typeof(strobj)) === 'object';
+					} catch(e) { /* ignore */ }
+					return false;
+				},
+				verify() {
+					//校验输入的附加信息是否符合要求。
+					var that = this;
+					if(!that.verifyJSON(that.testjson)) {
+						that.$message({
+							type: 'error',
+							message: '请检查附加信息的格式，是否缺少了 { 或 } 或 ,或  [  或 ],以及数据是否被[]包裹住'
+						});
+						return false;
+					}
+					var tmpdata = JSON.parse(that.testjson);
+					for(var i = 0; i < tmpdata.length; i++) {
+						var list = tmpdata[i];
+						console.log(list);
+						console.log(list.hasOwnProperty('title'));
+						if(list.hasOwnProperty('title') && list.hasOwnProperty('data')) {
+							if(list.data instanceof Array) {
+								for(var j = 0; j < list.data.length; j++) {
+									if(!(list.data[j] instanceof Array) || list.data[j].length != 2) {
+										that.$message({
+											type: 'error',
+											message: '数据的data字段中的元素格式不正确，必须为数组类型，且长度只能为2，如：  "data": [ [ "燃料类型", "天然气" ]]'
+										});
+										return false;
+									}
+									continue;
+								}
+								continue;
+							}
+							that.$message({
+								type: 'error',
+								message: '每条数据中的data字段格式不正确，必须是数组类型'
+							});
+							return false;
+						} else {
+							that.$message({
+								type: 'error',
+								message: '每条数据必须包含title和data字段'
+							});
+							return false;
+						}
+					}
+					alert('数据格式正确');
+					return true;
+				},
+			}
+		})
+	</script>
+
+</html>

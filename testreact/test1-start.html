@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>Hello React!</title>
+		<script src="https://cdn.bootcss.com/react/16.4.0/umd/react.development.js"></script>
+		<script src="https://cdn.bootcss.com/react-dom/16.4.0/umd/react-dom.development.js"></script>
+		<script src="https://cdn.bootcss.com/babel-standalone/6.26.0/babel.min.js"></script>
+	</head>
+
+	<body>
+
+		<div id="example"></div>
+		<script type="text/babel">
+//			ReactDOM.render(
+//				<div >
+//					<h3>我是h3啊</h3>
+//					<div>
+//						<h1>Hello, world!</h1>
+//					</div>
+//				</div>, 
+//				document.getElementById('example') 
+//			);
+//			
+//			
+//			
+//			function tick() { 
+//				const element = (
+//					<div>
+//						<h1>Hello, world!</h1>
+//						<h2>现在是 {new Date().toLocaleTimeString()}.</h2>
+//					</div>
+//				); 
+//				ReactDOM.render( element, document.getElementById('example') ); 
+//			} 
+//			setInterval(tick, 1000);
+
+			
+//			
+//			ReactDOM.render(
+//				<div>
+//					<h3>你好,我是h3</h3>
+//					<p>这是一个段落</p>					
+//				</div> ,
+//				document.getElementById('example')
+//			);
+			
+			
+//			function test(){
+//				let myname = 'xiao';
+//				ReactDOM.render(
+//					<div>
+//						<h3>这是标题3</h3>
+//						<h3>我的名字是: {myname}</h3>
+//						<h4>{new Date().toString()}</h4>
+//					</div> ,
+//					document.getElementById('example')
+//				);
+//			}
+//			
+//			setInterval(test, 1000);
+			
+			
+			
+			
+			
+			//组件定义
+			function Mydate(props){
+				console.log(props); //{time: "2018-07-27", name: "mydata1name"}
+				return <div>
+					<h3>时间是: {props.time}</h3>
+					<h3>名字是: {props.name}</h3>
+				
+				</div>;
+			}
+			
+			class Calendar extends React.component {
+				render(){
+					
+				}
+			}
+			
+			
+			let date1= <Mydate time="2018-07-27" name="mydata1name" />
+			
+			ReactDOM.render(date1, document.getElementById('example'));
+			
+			
+		</script>
+
+	</body>
+
+</html>

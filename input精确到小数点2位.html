@@ -1,0 +1,64 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!--<link rel="stylesheet" href="css/element_index.css">-->
+		<title>input精确到小数点两位</title>			
+		<style>
+			.container .content {
+				line-height: 38px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="container">
+				<div class="content">
+					<el-input-number @change="handleChange" size="middle" v-model="num9" :precision="2" :step="0.1" :max="10"></el-input-number>
+					<el-input type="number" @change="handleChange"  v-model="num10"></el-input>
+					
+				</div>
+			</div>
+
+		</div>
+	</body>
+
+	<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+	<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+
+	<script src="js/vue.js"></script>
+	<script src="js/index.js"></script>
+
+	<script>
+		new Vue({
+			el: '#app',
+			data: function() {
+				return {					
+					num9: 0,
+					num10: 0
+				}
+			},
+			created: function() {
+			
+			},
+			methods: {
+				trim(str) {
+					if(str== null){return ""}
+					str = str.replace(/^\s\s*/, ""); //去除首部空白字符
+					var length = str.length;
+					while(/\s/.test(str[--length])) 
+					return str.slice(0, length);
+				},
+				handleChange(value){
+					console.log(value);
+					console.log(typeof value);
+					return value;
+				}
+			}
+		})
+	</script>
+
+</html>

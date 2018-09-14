@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Date对象</title>
+	</head>
+
+	<body>
+
+		<script>
+			var servertime = new Date("2018-08-22 12:00:00");
+			var d1 = new Date();
+
+			var year = d1.getFullYear(); //四位数年份
+			var month = d1.getMonth(); // 0-11
+			var day = d1.getDate(); // 1-31  
+
+			var wk = d1.getDay(); // 获得星期几 0-6
+
+			var hour = d1.getHours();
+			var minute = d1.getMinutes();
+			var second = d1.getSeconds();
+			console.log(year + "-" + month + "-" + day + "  " + hour + ":" + minute + ":" + second);
+			console.log(d1.getTime()); //返回 1970 年 1 月 1 日至今的毫秒数。
+
+			//--------------时间设置
+			/*
+			d1.setFullYear(2020);
+			d1.setMonth(10);
+			d1.setDate(20);
+			
+			d1.setHours(21);
+			d1.setMinutes(30);
+			d1.setSeconds(45);
+			
+			console.log(d1);
+			//-----------时间比较
+			var test1 = new Date("2018-09-20 12:00:00");
+			var test2 = new Date("2018-09-19 13:00:00");
+			
+			console.log(test1 > test2);  // true
+			*/
+			console.log(servertime);
+			console.log(d1);
+
+			console.log(servertime.getTime());
+			console.log(d1.getTime());
+
+			console.log("toDateString()-->"+d1.toDateString()); //Mon Aug 20 2018
+			console.log("toTimeString()-->"+d1.toTimeString()); //17:06:18 GMT+0800 (中国标准时间)
+			
+			
+			console.log("toGMTString()-->"+d1.toGMTString()); //Mon, 20 Aug 2018 09:07:52 GMT
+			console.log("toUTCString()-->"+d1.toUTCString()); //Mon, 20 Aug 2018 09:07:52 GMT
+ 
+			console.log("toLocaleString()-->"+d1.toLocaleString()); //2018/8/20 下午5:04:35
+			console.log("toLocaleDateString()-->"+d1.toLocaleDateString()); //2018/8/20
+			console.log("toLocaleTimeString()-->"+d1.toLocaleTimeString()); //下午5:04:35
+
+			setInterval(function() {
+//				for(var i=0;i<1000000; i++) {
+//
+//				}
+				var distime    = servertime - new Date();
+				var leftday    = Math.floor(distime / (1000 * 60 * 60 * 24))   < 10 ? '0' + Math.floor(distime / (1000 * 60 * 60 * 24))   : Math.floor(distime / (1000 * 60 * 60 * 24));
+				var lefthour   = Math.floor((distime / (1000 * 60 * 60)) % 24) < 10 ? '0' + Math.floor((distime / (1000 * 60 * 60)) % 24) : Math.floor((distime / (1000 * 60 * 60)) % 24);
+				var leftminute = Math.floor((distime / (1000 * 60)) % 60)      < 10 ? '0' + Math.floor((distime / (1000 * 60)) % 60)      : Math.floor((distime / (1000 * 60)) % 60);
+				var leftsecond = Math.floor((distime / (1000)) % 60)           < 10 ? '0' + Math.floor((distime / (1000)) % 60)           : Math.floor((distime / (1000)) % 60);
+				//			console.log(servertime.format("YYYY-MM-DD HH:mm:ss"));
+				//			console.log(d1.format("YYYY-MM-DD HH:mm:ss"));
+				console.log("还剩" + leftday + "天; " + lefthour + "小时；" + leftminute + "分钟;" + leftsecond + "秒；");
+			}, 1000);
+		</script>
+	</body>
+
+</html>

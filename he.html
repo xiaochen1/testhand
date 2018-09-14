@@ -1,0 +1,765 @@
+<template>
+	<div class="global-container analysisobject-container ">
+
+		<topHeader></topHeader>
+		<div class="main-box flex-wrap">
+			<div class="boxLeft">
+				<leftMenu></leftMenu>
+			</div>
+			<div class="boxRight flexauto flex-wrap">
+				<div class="search-box flex-column">
+
+					<div class="search-row clearfix">
+
+						<div class="seainput clearfix">
+
+							<div class="inputbox fl" @keyup.enter="searchSheet">
+								<input v-model="searchSheetInput" type="text" placeholder="请输入关键字进行搜索" @change="handleSearchInputChange" />
+								<span @click="searchSheet" class="search-bgbtn"></span>
+							</div>
+
+						</div>
+
+					</div>
+					<div class="lists flexauto flex-column">
+						<table class="flexauto flex-column">
+
+							<tbody class="flexauto list-box">
+
+								<tr v-for="(sheet , index) in sheetLists" :class="{'act': acIndex == index}"
+									@click="changeSheet(index)">
+									<td>{{sheet.id}}</td>
+									<td>{{sheet.object_name}}</td>
+								</tr>
+
+								<div class="list-count">
+									<div class="countbox clearfix">
+										<div class="counts fl">
+											<span>{{sheetLists.length}}</span>
+										</div>
+
+										<div class="add fl">
+											<span @click="showAddSheet">添加</span>
+										</div>
+									</div>
+
+								</div>
+
+							</tbody>
+
+						</table>
+
+					</div>
+
+				</div>
+				<div class="right-main flexauto flex-column">
+					<!--数据源信息展示界面-->
+					<div v-show="needShow" class="main-content flexauto flex-column">
+						<div class="content-head clearfix">
+
+							<div class="title fl">
+								分析对象
+							</div>
+
+							<div class="handle fr" >
+								<span class="refresh" @click="refreshCurrentSheet" title="刷新"></span>
+								<span class="edit" @click="editCurrentSheet" title="编辑" v-show="sheetLists.length > 0"></span>
+								<span class="delete" @click="delCurrentSheet" title="删除" v-show="sheetLists.length > 0"></span>
+
+							</div>
+						</div>
+
+						<div class="content-body flexauto">
+							<div class="body-wrap clearfix">
+								<div class="msbox clearfix">
+									<div class="message-item">
+										<div class="title">id</div>
+										<div class="message">{{showSheetObj.id}}</div>
+									</div>
+									
+									<div class="message-item">
+										<div class="title">object_id</div>
+										<div class="message">{{showSheetObj.object_id}}</div>
+									</div>
+									
+									<div class="message-item">
+										<div class="title">object_name</div>
+										<div class="message">{{showSheetObj.object_name}}</div>
+									</div>
+									
+									<div class="message-item">
+										<div class="title">object_model</div>
+										<div class="message">{{showSheetObj.object_model}}</div>
+									</div>
+									
+									<div class="message-item">
+										<div class="title">object_reference_id</div>
+										<div class="message">{{showSheetObj.object_reference_id}}</div>
+									</div>
+									
+									<div class="message-item">
+										<div class="title">obj_group_id</div>
+										<div class="message">{{showSheetObj.obj_group_id}}</div>
+									</div>
+									
+									<div class="message-item item-row">
+										<div class="title">template</div>
+										<div class="message">{{showSheetObj.template}}</div>
+									</div>
+									
+									<div class="message-item item-row">
+										<div class="title">script</div>
+										<div class="message">{{showSheetObj.script}}</div>
+									</div>								
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+
+
+					<!--编辑界面-->
+					<div v-show="editShow" class="main-content flexauto flex-column">
+						<div class="content-head clearfix">
+
+							<div class="title fl">
+								分析对象
+							</div>
+
+							<div class="handle fr">
+								<span class="save" @click="saveEditSheet">保存</span>
+								<span class="close" @click="cancelEditSheet">取消</span>
+							</div>
+						</div>
+
+						<div class="content-body flexauto">
+							<div class="body-wrap clearfix">
+								<div class="msbox clearfix">
+									
+									
+									<div class="message-item">
+										<div class="title">id</div>
+										<div class="message">{{editSheetObj.id}}</div>
+									</div>
+									
+									<div class="message-item">
+										<div class="title">object_id</div>
+										<div class="message">
+											<el-input v-model="editSheetObj.object_id"></el-input>
+										</div>
+									</div>
+									
+									<div class="message-item">
+										<div class="title">object_name</div>
+										<div class="message">
+											<el-input v-model="editSheetObj.object_name"></el-input>
+										</div>
+									</div>
+									
+									<div class="message-item">
+										<div class="title">object_model</div>
+										<div class="message">
+											<el-input v-model="editSheetObj.object_model"></el-input>
+										</div>
+									</div>
+									
+									<div class="message-item">
+										<div class="title">object_reference_id</div>
+										<div class="message">
+											<el-input v-model="editSheetObj.object_reference_id"></el-input>
+										</div>
+									</div>
+									
+									
+									<div class="message-item">
+										<div class="title">obj_group_id</div>
+										<div class="message">
+											<el-select v-model="editSheetObj.obj_group_id" >
+												<el-option v-for="group in groupIds"
+													:key="group.id"
+													:label="group.id+ ', '+group.group_name"
+													:value="group.id"
+													selected = "group.id == editSheetObj.obj_group_id"
+													></el-option>
+											</el-select>
+
+										</div>
+									</div>
+									
+									<div class="message-item item-row">
+										<div class="title">template</div>
+										<div class="message">
+											<div class="cont">
+												<el-input type="textarea" :autosize="{minRows: 2, maxRows: 6}" v-model="editSheetObj.template"></el-input>
+												
+											</div>
+										</div>
+									</div>
+									
+									<div class="message-item item-row">
+										<div class="title">script</div>
+										<div class="message">
+											<div class="cont">
+												<el-input type="textarea" :autosize="{minRows: 2, maxRows: 6}" v-model="editSheetObj.script"></el-input>
+												
+											</div>
+
+										</div>
+									</div>																			
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+
+
+
+					<!--添加界面-->
+					<div v-show="addShow" class="main-content flexauto flex-column">
+						<div class="content-head clearfix">
+
+							<div class="title fl">
+								分析对象
+							</div>
+
+							<div class="handle fr">
+								<span class="save" @click="saveAddSheet">保存</span>
+								<span class="close" @click="cancelAddSheet">取消</span>
+							</div>
+						</div>
+
+						<div class="content-body flexauto">
+							<div class="body-wrap clearfix">
+								<div class="msbox clearfix">									
+
+									<div class="message-item  ">
+										<div class="title">object_id</div>
+										<div class="message">
+											<el-input :autosize="{minRows:2, maxRows: 6}" v-model="addSheetObj.object_id" ></el-input>
+										</div>
+									</div>
+
+									<div class="message-item  ">
+										<div class="title">object_name</div>
+										<div class="message">
+											<el-input :autosize="{minRows:2, maxRows: 6}" v-model="addSheetObj.object_name" ></el-input>
+										</div>
+									</div>
+
+									<div class="message-item  ">
+										<div class="title">object_model</div>
+										<div class="message">
+											<el-input :autosize="{minRows:2, maxRows: 6}" v-model="addSheetObj.object_model" ></el-input>
+										</div>
+									</div>
+
+									<div class="message-item  ">
+										<div class="title">object_reference_id</div>
+										<div class="message">
+											<el-input type="number" :autosize="{minRows:2, maxRows: 6}" v-model="addSheetObj.object_reference_id" ></el-input>
+										</div>
+									</div>
+
+									<div class="message-item  ">
+										<div class="title">obj_group_id</div>
+										<div class="message">
+											<el-select v-model="addSheetObj.obj_group_id">
+												
+												<el-option v-for="group  in  groupIds"
+													:key="group.id"
+													:label="group.id+ ', '+group.group_name"
+													:value="group.id"></el-option>
+											</el-select>
+										</div>
+									</div>
+
+
+
+									<div class="message-item  item-row">
+										<div class="title">template</div>
+										<div class="message">
+											<div class="cont">
+												<el-input type="textarea" :autosize="{minRows:2, maxRows: 6}" v-model="addSheetObj.template" ></el-input>
+												
+											</div>
+
+										</div>
+									</div>
+
+									<div class="message-item item-row ">
+										<div class="title">script</div>
+										<div class="message">
+											<div class="cont">
+												
+												<el-input type="textarea" :autosize="{minRows:2, maxRows: 6}" v-model="addSheetObj.script" ></el-input>
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+</template>
+
+<script>
+	import topHeader from './common/topHeader.vue'
+	import leftMenu from './common/leftMenu.vue'
+	import CONFIG from '@/config.js'
+
+	export default {
+		name: "analysisobject",
+
+		data: function() {
+			return {
+				needShow: true,
+				editShow: false,
+				addShow: false,
+
+				searchSheetInput: '',
+				acIndex: 0, //当前数据在数据列表中的索引
+				//当前这条数据
+				currentSheet: {
+
+				},
+				//展示当前数据
+				showSheetObj: {
+
+				},
+				//编辑当前数据
+				editSheetObj: {
+
+				},
+				//添加一条数据
+				addSheetObj: {
+
+				},
+
+
+				//添加时默认的表结构
+				defaultAddSheetObj: {
+					
+				},
+
+				//存放所有数据
+				sheetLists: [],
+				
+				groupIds: [], //存放下拉时的所有object_group_id
+			}
+		},
+		components: {
+			topHeader,
+			leftMenu
+		},
+		created: function() {
+			//			console.log(this.$route);
+
+			console.log('datasource页面初始化，正在查询表');
+//			this.showSheetObj = JSON.parse(JSON.stringify(this.currentSheet));
+//			this.editSheetObj = JSON.parse(JSON.stringify(this.currentSheet));
+
+			var that = this;
+
+			//获取所有数据
+			that.$http({
+				method: 'get',
+				url: CONFIG.ip.analysisobject + "/",
+
+			}).then(function(res) {
+				console.log(res);
+				var result = res.data;
+				// 请求成功
+				if(result.code == 0){
+					that.acIndex = 0; //默认返回结果的第一条数据作为  当前数据表
+					that.sheetLists = result.data.all_data;
+
+					that.currentSheet = JSON.parse(JSON.stringify(result.data.single_data));
+					that.showSheetObj = JSON.parse(JSON.stringify(result.data.single_data));
+
+					if(that.sheetLists.length > 0){
+						// 找到single_data在  all_data中的索引值
+						for(let i=0;i<that.sheetLists.length;  i++){
+							if(that.sheetLists[i].id == that.showSheetObj.id) {
+								that.acIndex = i;
+								break ;
+							}
+						}
+					}
+
+					return ;
+				} else {
+					that.sheetLists = [];
+					that.$message({
+						type: 'error',
+						message: res.data.code + ", "+res.data.msg
+					});
+				}
+
+			}).catch(function(err) {
+				console.log(err);
+//				that.$message({
+//					type: "error",
+//					message: err.code + ","+err.msg
+//				});
+			});
+
+		},
+		methods: {
+
+			//增
+			saveAddSheet: function() {
+				//保存新增加的客户表
+				console.log('正在保存新增的数据表');
+				var tempSheet = JSON.parse(JSON.stringify(this.addSheetObj));
+				var that = this;
+
+				that.$http.post(CONFIG.ip.analysisobject + '/', tempSheet, {
+					"Content-type": "application/json"
+				}).then(function(res) {
+					console.log(res);
+					//添加成功
+					var result = res.data;
+					if(result.code == 0) {
+						that.$message({
+							type: 'success',
+							message: result.msg + ",  2秒后自动刷新当前页面"
+						});
+
+						setTimeout(function(){
+							that.$router.go(0); // 刷新当前页面
+						},2000);
+
+					} else {
+						//添加失败
+						that.$message({
+							type: 'error',
+							message: result.code+ ", "+ result.msg
+						});
+					}
+				}).catch(function(err) {
+					console.log(err);
+					var result = err.data;
+					that.$message({
+						type: 'error',
+						message: result.code + ", "+ result.msg
+					});
+				});
+
+			},
+
+			//删
+			delCurrentSheet: function() {
+				//删除当前数据
+				console.log('del');
+				var that = this;
+				var tempSheet = JSON.parse(JSON.stringify(this.showSheetObj));
+
+				//删除某条数据
+				that.$confirm('该记录可能被关联引用，一旦删除，可能影响相关联的记录，请确认是否继续操作？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+
+					that.$http.delete(CONFIG.ip.analysisobject + '/', {
+						params: {
+							id: tempSheet.id
+						}
+					}).then(function(res) {
+						console.log(res);
+						var result = res.data;
+
+						if(result.code == 0){
+							that.$message({
+								type: "success",
+								message: result.msg+",  2秒后将自动刷新当前页面"
+							});
+							setTimeout(function(){
+								that.$router.go(0);
+							}, 2000);
+						}
+
+					}).catch(function(err) {
+						console.log(err);
+						var result = err.data;
+						that.$message({
+							type: "error",
+							message: result.code + ","+result.msg
+						});
+					});
+
+				}).catch( () => {
+					that.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
+				});
+
+			},
+
+
+
+
+			//改
+			saveEditSheet: function() {
+				//保存编辑后的客户表
+				console.log('正在保存编辑的客户表');
+				var that = this;
+				var tempSheet = JSON.parse(JSON.stringify(this.editSheetObj));
+
+				console.log(tempSheet);
+
+
+				that.$confirm('此操作将更新当前文件, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+
+					//更新数据
+					that.$http.put(CONFIG.ip.analysisobject + '/' , tempSheet).then(function(res) {
+						console.log(res);
+						var result = res.data;
+						//更新成功
+						if(result.code == 0) {
+							that.$message({
+								type: 'success',
+								message: result.msg + ",  2秒后将自动刷新当前页面"
+							});
+							setTimeout(function() {
+								that.$router.go(0);
+							}, 1500);
+
+						}  else {
+							//更新失败
+							that.$message({
+								type: 'error',
+								message: result.code + "," + result.msg
+							});
+						}
+
+					}).catch(function(err) {
+						that.$message('保存失败，请重新操作');
+						console.log(err);
+					});
+
+
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消更新'
+					});
+				});
+
+			},
+
+			//查满足条件的所有数据
+			searchSheet: function() {
+				//根据信息查询某个数据表
+				console.log('正在查询数据表');
+				var that = this;
+				that.$http({
+					method: 'get',
+					url: CONFIG.ip.analysisobject + '/',
+					params: {
+
+					}
+				}).then(function(res) {
+					console.log(res);
+
+					//查询成功，并返回数据
+					if(res.code == 0) {
+						that.sheetLists = res.data.all_list;
+						that.currentSheet = res.data.single_data;
+						that.acIndex = 0;
+
+						that.editSheetObj = JSON.parse(JSON.stringify(that.currentSheet));
+					}
+
+				}).catch(function(err) {
+					console.log(err);
+				});
+			},
+
+
+			//根据id查询某条数据,并展示
+			changeSheet: function(index) {
+				//切换当前数据表，并查看
+				console.log("切换数据表");
+				this.acIndex = index;
+				this.needShow = true;
+				this.editShow = false;
+				this.addShow = false;
+
+				//重置相关对象
+				this.currentSheet = {};
+				this.showSheetObj = {};
+				this.editSheetObj = {};
+				this.addSheetObj = {};
+
+
+				var that = this;
+
+				//根据当前这条数据的id查询该数据的相关信息
+				that.$http.get(	CONFIG.ip.analysisobject + "/",{
+					params: {
+						id: that.sheetLists[index].id
+					}
+				}).then(function(res){
+					//请求成功
+//					console.log(res);
+					var result = res.data;
+
+					if( result.code == 0  ) {
+						console.log(result.data.single_data);
+						that.currentSheet = result.data.single_data;
+						that.showSheetObj = JSON.parse(JSON.stringify(that.currentSheet));
+						return ;
+					}
+
+				}).catch(function(err){
+					//请求失败
+					console.log(err);
+					that.$message({
+						type: "error",
+						message: "请求数据失败，请点击重试"
+					});
+				});
+
+
+			},
+
+			//点击添加时需要进行的操作
+			showAddSheet: function() {
+
+				//展示添加账户表的界面
+				var that = this;
+				that.addShow = true;
+				that.needShow = false;
+				that.editShow = false;
+				
+				that.groupIds = [];
+
+				//初始化客户添加对象
+				that.addSheetObj = JSON.parse(JSON.stringify(that.defaultAddSheetObj));
+				that.getGroupIds();
+
+			},
+
+			//添加界面中点击取消时需要进行的操作
+			cancelAddSheet: function() {
+				console.log('取消添加数据表');
+
+				//显示账户表信息展示的界面
+				this.needShow = true;
+				this.editShow = false;
+				this.addShow = false;
+
+				// 重置添加对象
+				this.addSheetObj = {};
+			},
+
+			//点击编辑时需要进行的操作
+			editCurrentSheet: function() {
+				//展示数据表编辑界面,开始编辑
+				console.log('开始编辑----edit');
+				//展示出编辑页面
+				this.needShow = false;
+				this.editShow = true;
+				this.addShow = false;
+
+				//将当前这条数据赋值给   editSheetObj
+				this.editSheetObj = JSON.parse(JSON.stringify(this.currentSheet ));				
+				this.getGroupIds();
+			},
+
+			//取消编辑时要进行的操作
+			cancelEditSheet: function() {
+				//取消、退出账户表的编辑
+				console.log('取消编辑');
+				var that = this;
+				that.$confirm('此操作将放弃对当前文件的所有更改, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+
+					//显示数据展示界面
+					that.needShow = true;
+					that.editShow = false;
+					that.addShow = false;
+
+					//重置编辑对象
+					that.editSheetObj = {};
+
+					that.$message({
+						type: 'success',
+						message: '取消成功!'
+					});
+				}).catch(() => {
+					that.$message({
+						type: 'info',
+						message: '请继续编辑'
+					});
+				});
+
+			},
+
+
+			//刷新当前页
+			refreshCurrentSheet: function() {
+				//刷新当前页
+				console.log("正在刷新当前页");
+				console.log(this.$router);
+				console.log(this.$route);
+
+//				window.location.reload();
+//				this.$forceUpdate();// 无效
+				this.$router.go(0); // 有效，强制刷新浏览器
+//				this.$router.push('/');
+//				this.$router.push('/datasource');
+			},
+
+
+			handleSearchInputChange() {
+				if(this.searchSheetInput == '') {
+					this.$router.go(0);
+				}
+			},
+			getGroupIds() {
+				var that = this;
+				that.groupIds = [];//清空groupIds
+				that.$http.get(CONFIG.dropdownApi.groupid).then(function(res) {
+					console.log(res);
+					var result = res.data;//					
+					if(result.code == 0) {
+						that.groupIds = result.data.all_data;
+					}
+				}).catch(function(err) {
+					console.log(err);
+				});
+			}
+
+		},
+
+	}
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+	@import "../assets/sass/analysisobject.scss";
+
+</style>

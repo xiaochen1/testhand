@@ -1,0 +1,168 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!--<link rel="stylesheet" href="css/element_index.css">-->
+		<title>vue测试页面</title>
+
+		<style type="text/css">
+			.container {
+				width: 1000px;
+				height: 400px;
+				margin: 0 auto;
+			}
+			.container table {
+				display: block;
+				width: 100%;
+				height: 100%;
+				overflow: auto;
+			}
+			tr th,tr td:last-of-type {min-width: 100px;box-sizing: border-box;}
+			tr td:last-of-type {
+				padding: 0 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="container">
+				<table>
+					<thead>
+						<tr >
+							<th>  </th>
+							<th>FV</th>
+							<th>中文名</th>
+							<th>英文名</th>
+							<th>期望值</th>
+							<th>权重值</th>
+							<th>最大值</th>
+							<th>最小值</th>
+						</tr>
+					</thead>
+					
+					<tbody >
+						<tr v-for="(row, index) in scriptArr">
+							<td>
+								<input type="checkbox" :value="index" name="selectrow" v-model="selectedRow"/>
+							</td>
+							<td>{{row.fv}}</td>
+							<td>{{row.cname}}</td>
+							<td>{{row.ename}}</td>
+							<td>
+								<el-input v-model="row.expectedValue"></el-input>
+							</td>
+							<td>
+								<el-input v-model="row.weightValue"></el-input>
+							</td>
+							<td>
+								<el-input v-model="row.minValue"></el-input>
+							</td>
+							<td>
+								<el-input v-model="row.maxValue"></el-input>
+							</td>
+							
+						</tr>
+					</tbody>
+				</table>
+			</div>	
+			
+
+			{{selectedRow}}<br/>
+
+
+			
+			<el-button @click="see">确定</el-button>
+		</div>
+	</body>
+
+	<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+	<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+
+	<script src="js/vue.js"></script>
+	<script src="js/index.js"></script>
+
+	<script>
+		new Vue({
+			el: '#app',
+			data: function() {
+				return {
+					selectedRow: [], //存放选中的数据的索引
+					needScript: [], //后台需要的数据
+					scriptArr: [],   //将后台的script的数据进行格式拼装，便于操作
+					result: {
+						"code": 200,
+						"msg": "操作成功",
+						"info": {
+							"script": [
+								["S01", "Generation C-phase Voltage", "发电 C 相电压", "$AprusID-1", "L1_3_4096", "STA"],
+								["S02", "Generation B-phase Voltage", "发电 B 相电压", "$AprusID-1", "L1_3_4097", "STA"],
+								["S03", "Generation A-phase Voltage", "发电 A 相电压", "$AprusID-1", "L1_3_4098", "STA"],
+								["S04", "Generation AC-line Voltage", "发电 AC 线电压", "$AprusID-1", "L1_3_4099", "STA"],
+								["S05", "Generation BC-line Voltage", "发电 BC 线电压", "$AprusID-1", "L1_3_4100", "STA"],
+								["S06", "Generation AB-line Voltage", "发电 AB 线电压", "$AprusID-1", "L1_3_4101", "STA"],
+								["S07", "Generation C-phase Current", "发电 C 相电流", "$AprusID-1", "L1_3_4102", "STA"],
+								["S08", "Generation B-phase Current", "发电 B 相电流", "$AprusID-1", "L1_3_4103", "STA"],
+								["S09", "Generation A-phase Current", "发电 A 相电流", "$AprusID-1", "L1_3_4104", "STA"],
+								["S10", "Generation C-phase Power Factor", "发电 C 相功率因数", "$AprusID-1", "L1_3_4105", "STA"],
+								["S11", "Generation B-phase Power Factor", "发电 B 相功率因数", "$AprusID-1", "L1_3_4106", "STA"],
+								["S12", "Generation A-phase Power Factor", "发电 A 相功率因数", "$AprusID-1", "L1_3_4107", "STA"],
+
+
+							]
+						}
+					},
+					test: "haha",
+					
+				}
+			},
+			created: function() {
+				//				this.scriptArr = this.result.info.script;
+				let script = this.result.info.script;
+				this.scriptArr = [];
+				//将script组装成[{k:v}]形式，方便操作
+				for(let i = 0; i < script.length; i++) {
+					this.scriptArr[i] = {};
+					this.scriptArr[i].fv = script[i][0];
+					this.scriptArr[i].ename = script[i][1];
+					this.scriptArr[i].cname = script[i][2];
+					this.scriptArr[i].expectedValue = 0;
+					this.scriptArr[i].weightValue = 0;
+					this.scriptArr[i].maxValue = 0;
+					this.scriptArr[i].minValue = 0;
+				}			
+
+			},
+			methods: {
+				
+				see(){
+//					console.log(this.scriptArr);
+//					console.log(this.$refs.scriptTable);
+//					console.log(this.$refs.scriptTable.selection);
+//					if(this.topSelectIndex){
+//						
+//					}
+//					console.log(this.scriptArr);
+					console.log(this.selectedRow);
+					this.needScript = [];
+
+					
+					
+					
+					for(let i=0; i<this.selectedRow.length ; i++){
+						let index = this.selectedRow[i];
+						this.needScript.push(this.scriptArr[index]);
+					}
+					
+					console.log(this.needScript);
+
+
+				},
+				
+			}
+		})
+	</script>
+
+</html>

@@ -1,0 +1,235 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!--<link rel="stylesheet" href="css/element_index.css">-->
+		<title>vue测试页面</title>
+
+		<style type="text/css">
+			.container {
+				width: 1000px;
+				height: 400px;
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			
+			<div class="container">
+
+				<el-table :data="scriptArr" style="width: 100%"  height="100%" border ref="scriptTable"
+					@select="handleToggleRowSelection"
+					@select-all="handleSelectAll">
+					<el-table-column  type="selection" width="55" fixed="left" 
+						@selection-change="handleSelectChange"  >  </el-table-column>
+					<el-table-column label="FV"  fixed="left">
+						<template slot-scope="scope">
+							<span>{{ scope.row.fv }}</span>
+						</template>
+					</el-table-column>
+					
+					<el-table-column label="中文名" >
+						<template slot-scope="scope">
+							<span >{{ scope.row.cname }}</span>
+						</template>
+					</el-table-column>
+					
+					<el-table-column label="英文名" min-width="150">
+						<template slot-scope="scope">
+							<span >{{ scope.row.ename }}</span>
+						</template>
+					</el-table-column>
+					
+					<el-table-column label="期望值" min-width="120">
+						<template slot-scope="scope">
+
+							<el-input type="number" v-model="scope.row.expectedValue "></el-input>
+
+						</template>
+					</el-table-column>
+					
+					<el-table-column label="权重值" min-width="120">
+						<template slot-scope="scope">
+							<el-input type="number" v-model="scope.row.weightValue "></el-input>
+						</template>
+					</el-table-column>
+					
+					<el-table-column label="最大值" min-width="120">
+						<template slot-scope="scope">
+							<el-input type="number" v-model="scope.row.maxValue "></el-input>
+						</template>
+					</el-table-column>
+					
+					<el-table-column label="最小值" min-width="120" >
+						<template slot-scope="scope">
+							<el-input type="number" v-model="scope.row.minValue "></el-input>
+						</template>
+					</el-table-column>
+					
+					<el-table-column label="操作" fixed="right">
+						<template slot-scope="scope">
+							<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">置顶</el-button>
+
+						</template>
+					</el-table-column>
+				</el-table>
+				
+			</div>
+			<el-button type="primary"  @click="see">主要按钮</el-button>			
+			
+
+
+
+
+		</div>
+	</body>
+
+	<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+	<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+
+	<script src="js/vue.js"></script>
+	<script src="js/index.js"></script>
+
+	<script>
+		new Vue({
+			el: '#app',
+			data: function() {
+				return {
+					result: {
+						"code": 200,
+						"msg": "操作成功",
+						"info": {
+							"script": [
+								["S01", "Generation C-phase Voltage", "发电 C 相电压", "$AprusID-1", "L1_3_4096", "STA"],
+								["S02", "Generation B-phase Voltage", "发电 B 相电压", "$AprusID-1", "L1_3_4097", "STA"],
+								["S03", "Generation A-phase Voltage", "发电 A 相电压", "$AprusID-1", "L1_3_4098", "STA"],
+								["S04", "Generation AC-line Voltage", "发电 AC 线电压", "$AprusID-1", "L1_3_4099", "STA"],
+								["S05", "Generation BC-line Voltage", "发电 BC 线电压", "$AprusID-1", "L1_3_4100", "STA"],
+								["S06", "Generation AB-line Voltage", "发电 AB 线电压", "$AprusID-1", "L1_3_4101", "STA"],
+								["S07", "Generation C-phase Current", "发电 C 相电流", "$AprusID-1", "L1_3_4102", "STA"],
+								["S08", "Generation B-phase Current", "发电 B 相电流", "$AprusID-1", "L1_3_4103", "STA"],
+								["S09", "Generation A-phase Current", "发电 A 相电流", "$AprusID-1", "L1_3_4104", "STA"],
+								["S10", "Generation C-phase Power Factor", "发电 C 相功率因数", "$AprusID-1", "L1_3_4105", "STA"],
+								["S11", "Generation B-phase Power Factor", "发电 B 相功率因数", "$AprusID-1", "L1_3_4106", "STA"],
+								["S12", "Generation A-phase Power Factor", "发电 A 相功率因数", "$AprusID-1", "L1_3_4107", "STA"],
+
+
+							]
+						}
+					},
+					test: "haha",
+					scriptArr: [],
+					tableData3: [{
+						date: '2016-05-03',
+						name: '王小虎',
+						province: '上海',
+						city: '普陀区',
+						address: '上海市普陀区金沙江路 1518 弄',
+						zip: 200333
+					}, {
+						date: '2016-05-02',
+						name: '王小虎',
+						province: '上海',
+						city: '普陀区',
+						address: '上海市普陀区金沙江路 1518 弄',
+						zip: 200333
+					}, {
+						date: '2016-05-04',
+						name: '王小虎',
+						province: '上海',
+						city: '普陀区',
+						address: '上海市普陀区金沙江路 1518 弄',
+						zip: 200333
+					}, {
+						date: '2016-05-01',
+						name: '王小虎',
+						province: '上海',
+						city: '普陀区',
+						address: '上海市普陀区金沙江路 1518 弄',
+						zip: 200333
+					}, {
+						date: '2016-05-08',
+						name: '王小虎',
+						province: '上海',
+						city: '普陀区',
+						address: '上海市普陀区金沙江路 1518 弄',
+						zip: 200333
+					}, {
+						date: '2016-05-06',
+						name: '王小虎',
+						province: '上海',
+						city: '普陀区',
+						address: '上海市普陀区金沙江路 1518 弄',
+						zip: 200333
+					}, {
+						date: '2016-05-07',
+						name: '王小虎',
+						province: '上海',
+						city: '普陀区',
+						address: '上海市普陀区金沙江路 1518 弄',
+						zip: 200333
+					}],
+					
+					selectedScript: [],
+					selectedFv: [],
+				}
+			},
+			created: function() {
+				//				this.scriptArr = this.result.info.script;
+				let script = this.result.info.script;
+				this.scriptArr = [];
+				for(let i = 0; i < script.length; i++) {
+					this.scriptArr[i] = {};
+					this.scriptArr[i].fv = script[i][0];
+					this.scriptArr[i].ename = script[i][1];
+					this.scriptArr[i].cname = script[i][2];
+					this.scriptArr[i].expectedValue = 0;
+					this.scriptArr[i].weightValue = 0;
+					this.scriptArr[i].maxValue = 0;
+					this.scriptArr[i].minValue = 0;
+				}
+
+			},
+			methods: {
+				showScriptSelect: function() {
+					console.log(this.$refs.scriptTable);
+				},
+				handleSelectChange: function(val){
+					console.log('change');
+					this.multipleSelection  = val;
+					console.log(this.multipleSelection);
+				},
+				see(){
+//					console.log(this.scriptArr);
+					console.log(this.$refs.scriptTable);
+					console.log(this.$refs.scriptTable.selection);
+
+
+				},
+				handleToggleRowSelection(selection, row) { 
+					console.log(selection);
+					
+					console.log(row);
+				},
+				
+				toggleSelectionFv(fv) {
+					if(typeof arr == 'Array' && arr.length > 0){
+						for(let i=0; i<arr.length; i++) {
+							this.selectedFv.push(arr[i].fv);
+						}
+						
+					}
+				},
+				
+				handleSelectAll(selection) {
+					console.log(selection);
+				}
+			}
+		})
+	</script>
+
+</html>

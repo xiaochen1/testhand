@@ -1,0 +1,46 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!--<link rel="stylesheet" href="css/element_index.css">-->
+		<title>vue测试页面</title>			
+	</head>
+
+	<body>
+		<div id="app">
+		
+		</div>
+	</body>
+
+	<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+	<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+
+	<script src="js/vue.js"></script>
+	<script src="js/index.js"></script>
+
+	<script>
+		new Vue({
+			el: '#app',
+			data: function() {
+				return {					
+					
+				}
+			},
+			created: function() {
+			
+			},
+			methods: {
+				trim(str) {
+					if(str== null){return ""}
+					str = str.replace(/^\s\s*/, ""); //去除首部空白字符
+					var length = str.length;
+					while(/\s/.test(str[--length])) 
+					return str.slice(0, length);
+				}
+			}
+		})
+	</script>
+
+</html>

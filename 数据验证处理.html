@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>数据验证处理</title>
+	</head>
+	<body>
+		datasheet\2018\07/4f9c3abeb91f9c0717ed882ef00ddd00.jpg
+		
+		
+		
+		
+		
+		
+		
+		
+		<script>
+			var obj = {
+				filename1: "datasheet\2018\07/4f9c3abeb91f9c0717ed882ef00ddd00.jpg",
+				filename2: "datasheet/2018/07/4f9c3abeb91f9c0717ed882ef00ddd00.jpg"
+			}
+
+			console.log(obj.filename1);
+			console.log(obj.filename1.lastIndexOf('/'));
+			
+			console.log(obj.filename2);
+			console.log(obj.filename2.lastIndexOf('/'));
+			console.log(obj.filename2.substr((obj.filename2.lastIndexOf('/') +1)));
+			
+			
+			var regExpStr = ".+/(.+)$";
+			var filename = "c:/haha/test/文件.pdf";
+			
+			var exp = new RegExp(regExpStr);
+			var arr = exp.exec(filename);
+			console.log(arr);
+			
+		</script>
+	</body>
+</html>

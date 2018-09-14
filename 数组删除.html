@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>数组删除</title>
+	</head>
+	<body>
+		
+		
+		
+		
+		
+		<script>
+			/* 方法一
+			//获取某范围内的n个数字元素的数组
+			function  getArray(start,end,n){
+				let arr = [];
+				for(let i=0;i<n;i++){
+					arr.push(parseInt(Math.random()*(end-start) + start));
+				}
+				return arr;
+			}		
+
+			var randomArr = getArray(1,13, 20);
+			console.log(randomArr);
+			var temp = [];
+			let newArr = [];
+			//获取要删除的元素的索引值
+			for(let i=0;(i<randomArr.length-1); i++) {
+				for(let j=i+1; j<randomArr.length; j++) {					
+					if((randomArr[i] + randomArr[j] == 13) && temp.indexOf(i) == -1 && temp.indexOf(j) == -1) { 
+						console.log("randomArr["+i+"]--->"+randomArr[i]+";        a["+j+"]--->"+randomArr[j]);
+						temp.push(i);
+						temp.push(j);
+						break;
+					}
+				}
+				console.log('-------------');
+			}
+			
+			console.log(temp);
+			for(let i=0; i<temp.length; i++) {	
+				console.log(i+";删除randomArr["+temp[i]+']'+'为'+ randomArr[temp[i]]);
+			}				
+			//删除后的数组的值
+			for(let i=0; i<randomArr.length; i++) {	
+				if(temp.indexOf(i) == -1){
+					newArr.push(randomArr[i]);
+				}
+			}
+			console.log(newArr);
+			*/
+			
+			
+			//方法二
+			//获取某范围内的n个数字元素的数组
+			function  getArray(start,end,n){
+				let arr = [];
+				for(let i=0;i<n;i++){
+					arr.push(parseInt(Math.random()*(end-start) + start));
+				}
+				return arr;
+			}		
+
+			var randomArr = getArray(1,13, 20);
+			console.log(randomArr);
+			(function(){
+				for(let i=0; i<randomArr.length; i++) {
+					for(j=i+1; j<randomArr.length; j++) {
+						if(randomArr[i] + randomArr[j] == 13) {
+							console.log("从第"+i+"个位置删除"+ randomArr[i]);
+							randomArr.splice(i,1);
+							console.log("从第"+j+"个位置删除"+ randomArr[j-1]);
+							randomArr.splice(j-1,1);
+						}
+					}
+				}
+			})();
+			
+			
+			console.log(randomArr);
+			
+			
+			
+		</script>
+	</body>
+</html>

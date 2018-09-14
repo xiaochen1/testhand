@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		
+		
+		
+		
+		<script>
+			var str = "    abc  de  fd,    haha, e";
+			console.log(str.replace(/\s/g, ""));
+			console.log(str.replace(/\s/g, "").length);
+			console.log(str.replace(/\s/g, "").split(","));
+			
+			
+			var scriptstr = {"params":{"connector":{"INFLUXDB":{"host":"127.0.0.1:8086"},"MYSQL":{"host":"127.0.0.1:3306"}},"cycle":"45m","source":{"MO":{"object":["S01","S05"]},"CO":{"object":["MutualInductance=1","EnergyMeterInitialFigure=0"]}},"expr":"((S54-EnergyMeterInitialFigure+(EnergyMeterResetDigits*EnergyMeterResetNumbers))*MutualInductance)/(S04-FlowMeterInitialFigure+(FlowMeterResetDigits*FlowMeterResetNumbers))","selection":{"filter_and":{"customerID":["1001","1002","1003"],"equipmentID":["1001","1002"],"mappingID":["1003"]},"filter_not":{"customerID":["1001","1002","1003"],"equipmentID":["10011"],"mappingID":["10011","1002"]}}}};
+			console.log();
+		</script>
+	</body>
+</html>

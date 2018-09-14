@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title></title>
+    <script type="text/javascript">
+    	
+   		
+   		
+   		var testArr = [ { "title": "锅炉信息", "data": [ [ "燃料类型", "天然气" ], [ "锅炉重量", "1吨" ] ] }, 
+   		{ "title": "能效指标信息", "data": [ [ "热效率", 0.1 ], [ "燃料热值", 1000 ], [ "吨汽燃料指标", 0.1 ], [ "新字段", 0.1 ]    ] } ];
+
+   		
+   		var titleArr = [];
+   		
+   		for(var i=0;i<testArr.length; i++){
+   			titleArr.push(testArr[i].title);
+   		}
+   		
+   		console.log(titleArr.indexOf('能效指标信息'));
+   		console.log(titleArr); // 1
+   		
+   		
+   		
+    </script>
+</head>
+<body>
+	
+</body>
+</html>

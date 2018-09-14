@@ -1,0 +1,77 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+
+		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+		<!--<link rel="stylesheet" href="css/element_index.css">-->
+			
+		<link rel="stylesheet" href="css/vueindex.css">
+			
+		<title>vue测试页面</title>			
+		<style type="text/css">
+			.test {
+				float: left;
+				height: 100px;
+				line-height: 30px;
+				margin-bottom: 20px;
+				border: 1px solid #CCCCCC;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<input type="text" v-model="mystr"/>
+			<div class="test">{{mystr}}</div>
+			<div class="test" v-text="filtedStr"></div>
+		</div>
+	</body>
+
+	<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+	<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+
+	<script src="js/vue.js"></script>
+	<script src="js/index.js"></script>
+	
+	<script>
+		String.prototype.trim = function() {
+				var str = this,
+					str = str.replace(/^\s\s*/, ''),
+					ws = /\s/,
+					i = str.length;
+				while(ws.test(str.charAt(--i)));
+				return str.slice(0, i + 1);
+			}
+	</script>
+
+	<script>
+		new Vue({
+			el: '#app',
+			data: function() {
+				return {					
+					mystr: ""
+				}
+			},
+			created: function() {
+			
+			},
+			methods: {
+				trim(str) {
+					if(str== null){return ""}
+					str = str.replace(/^\s\s*/, ""); //去除首部空白字符
+					var length = str.length;
+					while(/\s/.test(str[--length])) 
+					return str.slice(0, length);
+				}
+			},
+			
+			computed: {
+				filtedStr() {
+					return this.mystr+"，，";
+				}
+			},
+		})
+	</script>
+
+</html>

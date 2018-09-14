@@ -1,0 +1,59 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!--<link rel="stylesheet" href="css/element_index.css">-->
+		<title>脚本编辑功能</title>			
+	</head>
+
+	<body>
+		<div id="app">
+		
+		</div>
+	</body>
+
+	<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+	<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+
+	<script src="js/vue.js"></script>
+	<script src="js/index.js"></script>
+
+	<script>
+		new Vue({
+			el: '#app',
+			data: function() {
+				return {					
+					myscript: [
+						["S01","Generation C-phase Voltage","发电 C 相电压","$AprusID-1","L1_3_4096","STA"],
+						["S02","Generation B-phase Voltage","发电 B 相电压",	"$AprusID-1","L1_3_4097","STA"],
+						["S03",	"Generation A-phase Voltage","发电 A 相电压","$AprusID-1","L1_3_4098","STA"],
+						["S04",	"Generation AC-line Voltage","发电 AC 线电压","$AprusID-1","L1_3_4099","STA"],
+						["S05",	"Generation BC-line Voltage","发电 BC 线电压","$AprusID-1","L1_3_4100","STA"],
+						["S06",	"Generation AB-line Voltage","发电 AB 线电压","$AprusID-1","L1_3_4101","STA"],
+						["S07","Generation C-phase Current","发电 C 相电流","$AprusID-1","L1_3_4102","STA"],
+						["S08","Generation B-phase Current","发电 B 相电流","$AprusID-1","L1_3_4103","STA"],
+						["S09","Generation A-phase Current","发电 A 相电流","$AprusID-1","L1_3_4104","STA"],
+						["S10",	"Generation C-phase Power Factor","发电 C 相功率因数","$AprusID-1","L1_3_4105","STA"],
+						["S11","Generation B-phase Power Factor","发电 B 相功率因数",	"$AprusID-1","L1_3_4106","STA"],
+						["S12","Generation A-phase Power Factor","发电 A 相功率因数",	"$AprusID-1","L1_3_4107","STA"]
+					]
+				}
+			},
+			created: function() {
+			
+			},
+			methods: {
+				trim(str) {
+					if(str== null){return ""}
+					str = str.replace(/^\s\s*/, ""); //去除首部空白字符
+					var length = str.length;
+					while(/\s/.test(str[--length])) 
+					return str.slice(0, length);
+				}
+			}
+		})
+	</script>
+
+</html>

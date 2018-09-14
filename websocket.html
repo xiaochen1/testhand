@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>测试websocket</title>
+	</head>
+
+	<body>
+
+		<script>
+			/*
+			var mysocket = new WebSocket("ws://127.0.0.1:8021");
+			mysocket.onopen = function() {
+				console.log("websocket opened");
+			}
+
+			mysocket.onmessage = function(evt) {
+				console.log("get websocket data");
+				console.log(evt.data);
+			}
+
+			mysocket.onclose = function() {
+				console.log("websocket closed!!!");
+			}
+			*/
+			
+			
+			
+			var ws = new WebSocket("wss://echo.websocket.org");
+
+			ws.onopen = function(evt) {
+				console.log("Connection open ...");
+				ws.send("Hello WebSockets!");
+			};
+
+			ws.onmessage = function(evt) {
+				console.log("Received Message: " + evt.data);
+//				ws.close();
+			};
+
+			ws.onclose = function(evt) {
+				console.log("Connection closed.");
+			};
+		</script>
+	</body>
+
+</html>

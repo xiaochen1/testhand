@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>2-三栏布局，左右固定，中间自适应（圣杯布局）</title>
+		<style>
+			* {margin: 0;  padding: 0;}
+			html, body {width: 100%; height: 100%;}
+			.container {
+				height: 100%;				
+			}
+			
+			.container .centerbox {
+				float: left;	
+				width: 100%;
+				height: 100%;
+				background: blue;				
+			}
+			.container .leftbox {
+				float: left;
+				width: 200px;
+				height: 100%;	
+				background: red;
+			}			
+			
+			
+						
+			.container .rightbox {
+				float: left;
+				width: 200px;
+				height: 100%;
+			    background: green;
+			}
+			
+		</style>
+	</head>
+	<body>
+		
+		<div class="container">			
+			<div class="centerbox">
+				<div class="center-main"></div>
+			</div>
+			<div class="leftbox"></div>		
+			<div class="rightbox"></div>		
+			
+		</div>
+	</body>
+</html>
